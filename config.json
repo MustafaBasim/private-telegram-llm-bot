@@ -1,0 +1,197 @@
+{
+    "models": [
+        {
+            "name": "gpt-oss-20b-Derestricted-MXFP4_MOE",
+            "path": "D:\\LLM\\lmstudio\\Felladrin\\gguf-MXFP4-gpt-oss-20b-Derestricted\\gpt-oss-20b-Derestricted-MXFP4_MOE.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-20b-Derestricted-MXFP4_MOE"
+        },
+        {
+            "name": "gpt-oss-120b-Derestricted.MXFP4_MOE",
+            "path": "D:\\LLM\\lmstudio\\gghfez\\gpt-oss-120b-Derestricted.MXFP4_MOE-gguf\\gpt-oss-120b-Derestricted.MXFP4_MOE.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-120b-Derestricted.MXFP4_MOE"
+        },
+        {
+            "name": "Devstral-Small-2507-Q6_K",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Devstral-Small-2507-GGUF\\Devstral-Small-2507-Q6_K.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "Devstral-Small-2507-Q6_K"
+        },
+        {
+            "name": "gemma-4-26B-A4B-it-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-26B-A4B-it-GGUF\\gemma-4-26B-A4B-it-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-26B-A4B-it-GGUF\\mmproj-gemma-4-26B-A4B-it-BF16.gguf",
+            "alias": "gemma-4-26B-A4B-it-Q4_K_M"
+        },
+        {
+            "name": "gemma-4-31B-it-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-31B-it-GGUF\\gemma-4-31B-it-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-31B-it-GGUF\\mmproj-gemma-4-31B-it-BF16.gguf",
+            "alias": "gemma-4-31B-it-Q4_K_M"
+        },
+        {
+            "name": "gemma-4-E2B-it-Q8_0",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-E2B-it-GGUF\\gemma-4-E2B-it-Q8_0.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-E2B-it-GGUF\\mmproj-gemma-4-E2B-it-BF16.gguf",
+            "alias": "gemma-4-E2B-it-Q8_0",
+            "thinking": false,
+            "send_thinking": true,
+            "send_chat_status": true
+        },
+        {
+            "name": "gemma-4-E4B-it-Q8_0",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-E4B-it-GGUF\\gemma-4-E4B-it-Q8_0.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-E4B-it-GGUF\\mmproj-gemma-4-E4B-it-BF16.gguf",
+            "alias": "gemma-4-E4B-it-Q8_0"
+        },
+        {
+            "name": "gpt-oss-120b-MXFP4-00001-of-00002",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gpt-oss-120b-GGUF\\gpt-oss-120b-MXFP4-00001-of-00002.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-120b-MXFP4-00001-of-00002"
+        },
+        {
+            "name": "gpt-oss-120b-MXFP4-00002-of-00002",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gpt-oss-120b-GGUF\\gpt-oss-120b-MXFP4-00002-of-00002.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-120b-MXFP4-00002-of-00002"
+        },
+        {
+            "name": "gpt-oss-20b-MXFP4",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\gpt-oss-20b-GGUF\\gpt-oss-20b-MXFP4.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-20b-MXFP4",
+            "send_chat_status": false,
+            "thinking": false
+        },
+        {
+            "name": "NVIDIA-Nemotron-3-Nano-30B-A3B-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\NVIDIA-Nemotron-3-Nano-30B-A3B-GGUF\\NVIDIA-Nemotron-3-Nano-30B-A3B-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "NVIDIA-Nemotron-3-Nano-30B-A3B-Q4_K_M"
+        },
+        {
+            "name": "NVIDIA-Nemotron-3-Nano-30B-A3B-Q8_0",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\NVIDIA-Nemotron-3-Nano-30B-A3B-GGUF\\NVIDIA-Nemotron-3-Nano-30B-A3B-Q8_0.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "NVIDIA-Nemotron-3-Nano-30B-A3B-Q8_0"
+        },
+        {
+            "name": "Qwen3-Coder-30B-A3B-Instruct-Q8_0",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3-Coder-30B-A3B-Instruct-GGUF\\Qwen3-Coder-30B-A3B-Instruct-Q8_0.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "Qwen3-Coder-30B-A3B-Instruct-Q8_0"
+        },
+        {
+            "name": "Qwen3-Coder-Next-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3-Coder-Next-GGUF\\Qwen3-Coder-Next-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "Qwen3-Coder-Next-Q4_K_M"
+        },
+        {
+            "name": "Qwen3.5-27B-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.5-27B-GGUF\\Qwen3.5-27B-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.5-27B-GGUF\\mmproj-Qwen3.5-27B-BF16.gguf",
+            "alias": "Qwen3.5-27B-Q4_K_M"
+        },
+        {
+            "name": "Qwen3.5-35B-A3B-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.5-35B-A3B-GGUF\\Qwen3.5-35B-A3B-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.5-35B-A3B-GGUF\\mmproj-Qwen3.5-35B-A3B-BF16.gguf",
+            "alias": "Qwen3.5-35B-A3B-Q4_K_M"
+        },
+        {
+            "name": "Qwen3.5-9B-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.5-9B-GGUF\\Qwen3.5-9B-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.5-9B-GGUF\\mmproj-Qwen3.5-9B-BF16.gguf",
+            "alias": "Qwen3.5-9B-Q4_K_M"
+        },
+        {
+            "name": "Qwen3.6-27B-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.6-27B-GGUF\\Qwen3.6-27B-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.6-27B-GGUF\\mmproj-Qwen3.6-27B-BF16.gguf",
+            "alias": "Qwen3.6-27B-Q4_K_M"
+        },
+        {
+            "name": "Qwen3.6-35B-A3B-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.6-35B-A3B-GGUF\\Qwen3.6-35B-A3B-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": true,
+            "mmproj_path": "D:\\LLM\\lmstudio\\lmstudio-community\\Qwen3.6-35B-A3B-GGUF\\mmproj-Qwen3.6-35B-A3B-BF16.gguf",
+            "alias": "Qwen3.6-35B-A3B-Q4_K_M"
+        },
+        {
+            "name": "gpt-oss-20b-F16",
+            "path": "D:\\LLM\\lmstudio\\unsloth\\gpt-oss-20b-GGUF\\gpt-oss-20b-F16.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-20b-F16"
+        },
+        {
+            "name": "gpt-oss-20b-Q4_K_S",
+            "path": "D:\\LLM\\lmstudio\\unsloth\\gpt-oss-20b-GGUF\\gpt-oss-20b-Q4_K_S.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "gpt-oss-20b-Q4_K_S"
+        },
+        {
+            "name": "Nemotron-3-Nano-30B-A3B-Q4_K_S",
+            "path": "D:\\LLM\\lmstudio\\unsloth\\Nemotron-3-Nano-30B-A3B-GGUF\\Nemotron-3-Nano-30B-A3B-Q4_K_S.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "Nemotron-3-Nano-30B-A3B-Q4_K_S"
+        },
+        {
+            "name": "Qwen3-Next-80B-A3B-Instruct-Q4_K_M",
+            "path": "D:\\LLM\\lmstudio\\unsloth\\Qwen3-Next-80B-A3B-Instruct-GGUF\\Qwen3-Next-80B-A3B-Instruct-Q4_K_M.gguf",
+            "ctx_len": 8192,
+            "multimodal": false,
+            "mmproj_path": null,
+            "alias": "Qwen3-Next-80B-A3B-Instruct-Q4_K_M"
+        }
+    ],
+    "system_messages": {
+        "D:\\LLM\\lmstudio\\lmstudio-community\\gpt-oss-20b-GGUF\\gpt-oss-20b-MXFP4.gguf": "you only answer with one sentence only, don't do long messages."
+    },
+    "last_loaded_model": "D:\\LLM\\lmstudio\\lmstudio-community\\gemma-4-E2B-it-GGUF\\gemma-4-E2B-it-Q8_0.gguf"
+}

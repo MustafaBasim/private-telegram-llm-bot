@@ -1,0 +1,4 @@
+.venv/
+/examples
+.env
+/demo
