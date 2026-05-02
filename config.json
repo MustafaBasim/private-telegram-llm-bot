@@ -82,7 +82,7 @@
             "multimodal": false,
             "mmproj_path": null,
             "alias": "gpt-oss-20b-MXFP4",
-            "send_chat_status": false,
+            "send_chat_status": true,
             "thinking": false
         },
         {

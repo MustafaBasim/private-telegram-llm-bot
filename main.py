@@ -10,6 +10,7 @@ import logging
 import re
 import html
 import asyncio
+from telegramify_markdown import markdownify
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, BotCommand
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
@@ -213,6 +214,26 @@ async def unload_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("No model is currently loaded.")
 
 @restricted
+async def reload_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global LLAMA_SERVER_PROCESS, CURRENT_MODEL
+    if not CURRENT_MODEL:
+        await update.message.reply_text("No model is currently loaded to reload.")
+        return
+        
+    model_to_reload = CURRENT_MODEL.copy()
+    await update.message.reply_text(f"Reloading {model_to_reload['alias']}...")
+    
+    if LLAMA_SERVER_PROCESS:
+        LLAMA_SERVER_PROCESS.terminate()
+        LLAMA_SERVER_PROCESS.wait()
+        LLAMA_SERVER_PROCESS = None
+        
+    CURRENT_MODEL = None
+    CHAT_HISTORY[update.effective_user.id] = []
+    
+    await load_model(update.message, model_to_reload, update.effective_user.id)
+
+@restricted
 async def shutdown_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global LLAMA_SERVER_PROCESS
     if LLAMA_SERVER_PROCESS:
@@ -229,7 +250,11 @@ async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @restricted
 async def status_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    ram_usage = psutil.virtual_memory().percent
+    vm = psutil.virtual_memory()
+    ram_total_gb = vm.total / (1024**3)
+    ram_used_gb = vm.used / (1024**3)
+    ram_pct = vm.percent
+    ram_str = f"RAM: {ram_used_gb:.1f} GB / {ram_total_gb:.1f} GB ({ram_pct}%)"
     
     vram_str = "VRAM: Unknown"
     try:
@@ -238,11 +263,20 @@ async def status_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=True
         )
         lines = output.strip().split("\n")
-        vram_str = f"VRAM: {lines[0]}"
+        parts = lines[0].replace(" MiB", "").split(",")
+        if len(parts) == 2:
+            used_mib = float(parts[0].strip())
+            total_mib = float(parts[1].strip())
+            used_gb = used_mib / 1024
+            total_gb = total_mib / 1024
+            pct = (used_mib / total_mib) * 100 if total_mib > 0 else 0
+            vram_str = f"VRAM: {used_gb:.1f} GB / {total_gb:.1f} GB ({pct:.1f}%)"
+        else:
+            vram_str = f"VRAM: {lines[0]}"
     except Exception:
         pass
         
-    status = f"System Status:\nRAM: {ram_usage}%\n{vram_str}\n"
+    status = f"System Status:\n{ram_str}\n{vram_str}\n"
     if CURRENT_MODEL:
         status += f"\nLoaded Model: {CURRENT_MODEL['alias']}"
         status += f"\nContext Length: {CURRENT_MODEL.get('ctx_len')}"
@@ -325,85 +359,61 @@ async def set_context(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"Context length for {CURRENT_MODEL['alias']} set to {ctx_val}. Please /unload and reload for changes to take effect.")
 
 @restricted
-async def set_thinking(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text("Usage: /set_thinking <true/false>")
-        return
-        
-    val = context.args[0].lower()
-    if val not in ["true", "false"]:
-        await update.message.reply_text("Please provide either 'true' or 'false'.")
-        return
-        
-    is_thinking = (val == "true")
-        
+async def toggle_thinking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not CURRENT_MODEL:
-        await update.message.reply_text("Please load a model first before setting its thinking mode.")
+        await update.message.reply_text("Please load a model first before toggling its thinking mode.")
         return
+        
+    current_val = CURRENT_MODEL.get("thinking", True)
+    new_val = not current_val
         
     cfg = load_config()
     for m in cfg.get("models", []):
         if m["path"] == CURRENT_MODEL["path"]:
-            m["thinking"] = is_thinking
-            CURRENT_MODEL["thinking"] = is_thinking
+            m["thinking"] = new_val
+            CURRENT_MODEL["thinking"] = new_val
             break
             
     save_config(cfg)
-    await update.message.reply_text(f"Thinking mode for {CURRENT_MODEL['alias']} set to {is_thinking}. Please /unload and reload for changes to take effect.")
+    await update.message.reply_text(f"Thinking mode for {CURRENT_MODEL['alias']} toggled to {new_val}. Please /reload for changes to take effect.")
 
 @restricted
-async def set_send_thinking(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text("Usage: /set_send_thinking <true/false>")
-        return
-        
-    val = context.args[0].lower()
-    if val not in ["true", "false"]:
-        await update.message.reply_text("Please provide either 'true' or 'false'.")
-        return
-        
-    send_thinking = (val == "true")
-        
+async def toggle_send_thinking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not CURRENT_MODEL:
-        await update.message.reply_text("Please load a model first before setting this preference.")
+        await update.message.reply_text("Please load a model first before toggling this preference.")
         return
+        
+    current_val = CURRENT_MODEL.get("send_thinking", True)
+    new_val = not current_val
         
     cfg = load_config()
     for m in cfg.get("models", []):
         if m["path"] == CURRENT_MODEL["path"]:
-            m["send_thinking"] = send_thinking
-            CURRENT_MODEL["send_thinking"] = send_thinking
+            m["send_thinking"] = new_val
+            CURRENT_MODEL["send_thinking"] = new_val
             break
             
     save_config(cfg)
-    await update.message.reply_text(f"Send thinking blocks for {CURRENT_MODEL['alias']} set to {send_thinking}.")
+    await update.message.reply_text(f"Send thinking blocks for {CURRENT_MODEL['alias']} toggled to {new_val}.")
 
 @restricted
-async def set_chat_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text("Usage: /set_chat_status <true/false>")
-        return
-        
-    val = context.args[0].lower()
-    if val not in ["true", "false"]:
-        await update.message.reply_text("Please provide either 'true' or 'false'.")
-        return
-        
-    send_status = (val == "true")
-        
+async def toggle_chat_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not CURRENT_MODEL:
-        await update.message.reply_text("Please load a model first before setting this preference.")
+        await update.message.reply_text("Please load a model first before toggling this preference.")
         return
+        
+    current_val = CURRENT_MODEL.get("send_chat_status", False)
+    new_val = not current_val
         
     cfg = load_config()
     for m in cfg.get("models", []):
         if m["path"] == CURRENT_MODEL["path"]:
-            m["send_chat_status"] = send_status
-            CURRENT_MODEL["send_chat_status"] = send_status
+            m["send_chat_status"] = new_val
+            CURRENT_MODEL["send_chat_status"] = new_val
             break
             
     save_config(cfg)
-    await update.message.reply_text(f"Chat status display for {CURRENT_MODEL['alias']} set to {send_status}.")
+    await update.message.reply_text(f"Chat status display for {CURRENT_MODEL['alias']} toggled to {new_val}.")
 
 @restricted
 async def set_system_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -569,7 +579,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 
         CHAT_HISTORY[user_id].append({"role": "assistant", "content": reply_text})
         
-        await update.message.reply_text(reply_text)
+        try:
+            md_text = markdownify(reply_text)
+            await update.message.reply_text(md_text, parse_mode="MarkdownV2")
+        except Exception:
+            await update.message.reply_text(reply_text)
         
         # Send chat status if enabled
         if CURRENT_MODEL.get("send_chat_status", False):
@@ -596,13 +610,14 @@ async def post_init(application: Application):
         BotCommand("update_models", "Scan for new models"),
         BotCommand("load", "Load the last loaded model"),
         BotCommand("unload", "Unload the currently running model"),
+        BotCommand("reload", "Quickly reload the current model"),
         BotCommand("shutdown", "Shut down the bot and server"),
         BotCommand("clear", "Clear the current chat history"),
         BotCommand("status", "Show system RAM and VRAM usage"),
         BotCommand("set_context", "Set context length (e.g., 8192)"),
-        BotCommand("set_thinking", "Enable/disable thinking mode (true/false)"),
-        BotCommand("set_send_thinking", "Send thinking block in chat (true/false)"),
-        BotCommand("set_chat_status", "Show generation stats (true/false)"),
+        BotCommand("toggle_thinking", "Toggle thinking mode on/off"),
+        BotCommand("toggle_send_thinking", "Toggle sending thinking block in chat"),
+        BotCommand("toggle_chat_status", "Toggle showing generation stats"),
         BotCommand("set_system_message", "Set system prompt"),
         BotCommand("get_system_message", "View system prompt"),
         BotCommand("clear_system_message", "Clear system prompt"),
@@ -622,14 +637,15 @@ def main():
     application.add_handler(CommandHandler("models", list_models))
     application.add_handler(CommandHandler("load", load_cmd))
     application.add_handler(CommandHandler("unload", unload_cmd))
+    application.add_handler(CommandHandler("reload", reload_cmd))
     application.add_handler(CommandHandler("shutdown", shutdown_cmd))
     application.add_handler(CommandHandler("clear", clear_cmd))
     application.add_handler(CommandHandler("status", status_cmd))
     application.add_handler(CommandHandler("help", help_cmd))
     application.add_handler(CommandHandler("set_context", set_context))
-    application.add_handler(CommandHandler("set_thinking", set_thinking))
-    application.add_handler(CommandHandler("set_send_thinking", set_send_thinking))
-    application.add_handler(CommandHandler("set_chat_status", set_chat_status))
+    application.add_handler(CommandHandler("toggle_thinking", toggle_thinking))
+    application.add_handler(CommandHandler("toggle_send_thinking", toggle_send_thinking))
+    application.add_handler(CommandHandler("toggle_chat_status", toggle_chat_status))
     application.add_handler(CommandHandler("set_system_message", set_system_message))
     application.add_handler(CommandHandler("get_system_message", get_system_message))
     application.add_handler(CommandHandler("clear_system_message", clear_system_message))
